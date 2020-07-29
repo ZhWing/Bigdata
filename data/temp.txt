@@ -1,0 +1,6 @@
+hive	40
+hbase	38
+hadoop	27
+java	21
+python	21
+scala	18
