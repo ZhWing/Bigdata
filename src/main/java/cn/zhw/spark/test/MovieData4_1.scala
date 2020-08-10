@@ -4,26 +4,22 @@ import org.apache.spark.{SparkConf, SparkContext}
 object MovieData4_1 {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf()
-    conf.set("spark.master", "local")
-    conf.set("spark.app.name", "spark demo")
-    val sc = new SparkContext(conf);
-    // 读取hdfs数据
-    val textFileRdd = sc.textFile("hdfs://192.168.247.137:9000/data/log_movie.txt")
-    val newFileRdd = textFileRdd.filter(f=>f.indexOf("上海堡垒")!=(-1))
-    //    将字符串分割
-    val data = newFileRdd.map(f=>f.split(","))
+    conf.setMaster("local")
+    conf.setAppName("SpakrDemo")
 
-    val data1 = data.map(f=> {
-      if(f(1).indexOf("2019-昨天")==(-1)){
-        (f(1),1)
-      }else{
-        f(1)="2019-昨天"
-        ("2019-昨天",1)
+    val sc = new SparkContext(conf)
+
+    val data = sc.textFile("hdfs://192.168.247.137:9000/data/log_movie.txt")
+    val data1 = data.filter(line => line.indexOf("上海堡垒") != (-1)).map(line => line.split(",")) // .foreach(line => println(line(1)))
+
+    val data2 = data1.map(line => {
+      if (line(1) .indexOf("2019-昨天") == (-1)){
+        (line(1), 1)
+      } else {
+        ("2019-昨天", 1)
       }
-    })
-    //      根据日期做reduce，然后排序
-    data1.reduceByKey(_+_).collect.sortBy(f=>f._1).foreach(println)
-    // 写入数据到hdfs系统
-    //      data1.saveAsTextFile("hdfs://192.168.220.128:9000/test/result2")
+    }) // .foreach(println)
+
+    data2.reduceByKey(_ + _).sortBy(line => line._1).foreach(println)
   }
 }
