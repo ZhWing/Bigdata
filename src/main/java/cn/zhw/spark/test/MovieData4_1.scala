@@ -10,7 +10,7 @@ object MovieData4_1 {
 
     val sc: SparkContext = new SparkContext(conf)
 
-    val data: RDD[String] = sc.textFile("hdfs://192.168.247.137:9000/data/log_movie.txt")
+    val data: RDD[String] = sc.textFile("hdfs://192.168.247.146:9000/data/log_movie.txt")
     val data1: RDD[Array[String]] = data.filter(line => line.indexOf("上海堡垒") != (-1)).map(line => line.split(",")) // .foreach(line => println(line(1)))
 
     val data2: RDD[(String, Int)] = data1.map(line => {
@@ -22,6 +22,6 @@ object MovieData4_1 {
     }) // .foreach(println)
 
     data2.reduceByKey(_ + _).sortBy(line => line._1).foreach(println)
-    // data2.saveAsTextFile("hdfs://192.168.247.137:9000/data/log_movie_4_1")
+    data2.saveAsTextFile("hdfs://192.168.247.146:9000/data/log_movie_4_1")
   }
 }

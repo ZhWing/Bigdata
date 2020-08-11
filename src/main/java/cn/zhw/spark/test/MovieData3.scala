@@ -11,13 +11,15 @@ object MovieData3 {
 
     val sc: SparkContext = new SparkContext(conf)
 
-    val data: RDD[String] = sc.textFile("hdfs://192.168.247.137:9000/data/log_movie/part-00000")
+    val data: RDD[String] = sc.textFile("hdfs://192.168.247.146:9000/data/log_movie_2/part-00000")
 
     val data1: RDD[(String, Int)] = data.map(line => (line.split(",")(8), 1))
-    data1.foreach(println)
+    val sum: Long = data1.count()
 
     val data2: RDD[(String, Int)] = data1.reduceByKey(_ + _)
-    data2.foreach(println)
-    // data2.saveAsTextFile("hdfs://192.168.247.137:9000/data/log_movie_3")
+    data2.foreach(line => {
+      println(line._1 + ": " + (line._2.toDouble * 100 / sum).formatted("%.2f") + "%")
+    })
+    data2.saveAsTextFile("hdfs://192.168.247.146:9000/data/log_movie_3")
   }
 }
