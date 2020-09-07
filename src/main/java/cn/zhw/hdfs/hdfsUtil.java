@@ -35,6 +35,17 @@ public class hdfsUtil {
             out.write(b, 0, read);
         }
 
+        // 追加内容
+        FileInputStream fis = new FileInputStream("data/word.txt");
+        FSDataOutputStream append = fs.append(new Path("/data/1.txt"));
+
+        // append.write("678910".getBytes());
+        byte[] b1 = new byte[1024 * 1024];
+        int flag = 0;
+        while ((flag = fis.read(b1)) > 0) {
+            append.write(b1, 0, flag);
+        }
+
         // 将 hdfs 文件下载到本地
         FSDataInputStream in1 = fs.open(new Path("/data/001"));
         FileOutputStream out1 = new FileOutputStream("data/words.txt");
