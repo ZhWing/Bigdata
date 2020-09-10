@@ -6,7 +6,7 @@ import org.apache.spark.rdd.RDD
 
 object demo5 {
   def main(args: Array[String]): Unit = {
-    val conf:SparkConf = new SparkConf()
+    val conf: SparkConf = new SparkConf()
     conf.setAppName("SparkDemo")
     conf.setMaster("local")
 

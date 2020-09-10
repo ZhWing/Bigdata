@@ -6,8 +6,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 object MovieData2 {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
+    conf.setAppName("SparkDemo")
     conf.setMaster("local")
-    conf.setAppName("spark demo")
     val sc: SparkContext = new SparkContext(conf)
     // 读取hdfs数据
     val data: RDD[String] = sc.textFile("hdfs://192.168.247.146:9000/data/log_movie.txt")
