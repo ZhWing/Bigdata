@@ -42,8 +42,7 @@ object AllPassStudent {
       """
         |select a.id, name, class, sname, score from student a join score b on a.id=b.id
         |where a.id in
-        |(
-        |select id from
+        |(select id from
         |(select id, count(*) pass from score c join course d on c.sname=d.sname where score > num*0.6
         |group by id having pass=6) e)
         |""".stripMargin)
